@@ -9,6 +9,9 @@ The goal of this branch is to update https://github.com/ioquake/ioq3 to the late
     $ make PLATFORM=browser EMSCRIPTEN=/home/gitpod/em/emscripten/.../bin
     $ cd /workspace/ioq3/build/release-browser-wasm
     $ wget http://content.quakejs.com/assets/857908472-linuxq3ademo-1.11-6.x86.gz.sh
+    $ tail -n +165 857908472-linuxq3ademo-1.11-6.x86.gz.sh > h1.gz
+    $ gzip -df h1.gz
+    $ tar xf h1
     $ wget http://content.quakejs.com/assets/296843703-linuxq3apoint-1.32b-3.x86.run
     $wget https://www.ioquake3.org/data/quake3-latest-pk3s.zip
     $ curl 'https://www.ioquake3.org/data/quake3-latest-pk3s.zip' -H 'Connection: keep-alive' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'Upgrade-Insecure-Requests: 1' -H 'DNT: 1' -H 'User-Agent: Mozilla/5.0 (X11; CrOS x86_64 11151.113.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.127 Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' -H 'Referer: https://ioquake3.org/extras/patch-data/' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: vi,en-US;q=0.9,en;q=0.8' --compressed --output hi.zip

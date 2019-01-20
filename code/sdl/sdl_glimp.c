@@ -787,7 +787,7 @@ static qboolean GLimp_StartDriverAndSetMode(int mode, qboolean fullscreen, qbool
 		fullscreen = qfalse;
 	}
 
-	 err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core);
+	err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core);
 
 	switch ( err )
 	{
