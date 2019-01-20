@@ -276,6 +276,13 @@ static qboolean GLimp_GetProcAddresses( qboolean fixedFunction ) {
 		sscanf( version, "%d.%d", &qglMajorVersion, &qglMinorVersion );
 	}
 
+#ifdef EMSCRIPTEN
+			QGL_1_1_PROCS;
+			QGL_DESKTOP_1_1_PROCS;
+			QGL_1_3_PROCS;
+			QGL_1_5_PROCS;
+			QGL_2_0_PROCS;
+#else
 	if ( fixedFunction ) {
 		if ( QGL_VERSION_ATLEAST( 1, 2 ) ) {
 			QGL_1_1_PROCS;
@@ -316,6 +323,7 @@ static qboolean GLimp_GetProcAddresses( qboolean fixedFunction ) {
 	if ( QGL_VERSION_ATLEAST( 3, 0 ) || QGLES_VERSION_ATLEAST( 3, 0 ) ) {
 		QGL_3_0_PROCS;
 	}
+#endif
 
 #undef GLE
 
@@ -590,7 +598,7 @@ static int GLimp_SetMode(int mode, qboolean fullscreen, qboolean noborder, qbool
 			glConfig.stereoEnabled = qfalse;
 			SDL_GL_SetAttribute(SDL_GL_STEREO, 0);
 		}
-		
+
 		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 #if 0 // if multisampling is enabled on X11, this causes create window to fail.
@@ -778,8 +786,8 @@ static qboolean GLimp_StartDriverAndSetMode(int mode, qboolean fullscreen, qbool
 		r_fullscreen->modified = qfalse;
 		fullscreen = qfalse;
 	}
-	
-	err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core);
+
+	 err = GLimp_SetMode(mode, fullscreen, noborder, gl3Core);
 
 	switch ( err )
 	{

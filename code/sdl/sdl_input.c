@@ -929,7 +929,7 @@ static void IN_JoyMove( void )
 			{
 				Sint16 axis = SDL_JoystickGetAxis(stick, i);
 				float f = ( (float) abs(axis) ) / 32767.0f;
-				
+
 				if( f < in_joystickThreshold->value ) axis = 0;
 
 				if ( axis != stick_state.oldaaxes[i] )
@@ -1245,7 +1245,9 @@ void IN_Init( void *windowData )
 	Cvar_SetValue( "com_unfocused",	!( appState & SDL_WINDOW_INPUT_FOCUS ) );
 	Cvar_SetValue( "com_minimized", appState & SDL_WINDOW_MINIMIZED );
 
+#ifndef EMSCRIPTEN
 	IN_InitJoystick( );
+#endif
 	Com_DPrintf( "------------------------------------\n" );
 }
 

@@ -31,6 +31,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <ctype.h>
 #include <errno.h>
 
+#ifdef EMSCRIPTEN
+#include "emscripten.h"
+#endif
+
 #ifndef DEDICATED
 #ifdef USE_LOCAL_HEADERS
 #	include "SDL.h"
@@ -519,7 +523,7 @@ void *Sys_LoadDll(const char *name, qboolean useSystemLib)
 		Com_Printf("Trying to load \"%s\"...\n", name);
 		dllhandle = Sys_LoadLibrary(name);
 	}
-	
+
 	if(!dllhandle)
 	{
 		const char *topDir;
@@ -545,10 +549,10 @@ void *Sys_LoadDll(const char *name, qboolean useSystemLib)
 		if(!dllhandle)
 		{
 			const char *basePath = Cvar_VariableString("fs_basepath");
-			
+
 			if(!basePath || !*basePath)
 				basePath = ".";
-			
+
 			if(FS_FilenameCompare(topDir, basePath))
 			{
 				len = Com_sprintf(libPath, sizeof(libPath), "%s%c%s", basePath, PATH_SEP, name);
@@ -562,12 +566,12 @@ void *Sys_LoadDll(const char *name, qboolean useSystemLib)
 					Com_Printf("Skipping trying to load \"%s\" from \"%s\", file name is too long.\n", name, basePath);
 				}
 			}
-			
+
 			if(!dllhandle)
 				Com_Printf("Loading \"%s\" failed\n", name);
 		}
 	}
-	
+
 	return dllhandle;
 }
 
@@ -681,6 +685,20 @@ void Sys_SigHandler( int signal )
 		Sys_Exit( 2 );
 }
 
+
+#ifdef EMSCRIPTEN
+/*
+=================
+Sys_GameLoop
+=================
+*/
+void Sys_GameLoop(void)
+{
+    Com_Frame();
+}
+#endif
+
+
 /*
 =================
 main
@@ -754,7 +772,7 @@ int main( int argc, char **argv )
 
 	CON_Init( );
 	Com_Init( commandLine );
-	NET_Init( );
+	// NET_Init( );
 
 	signal( SIGILL, Sys_SigHandler );
 	signal( SIGFPE, Sys_SigHandler );
@@ -762,11 +780,13 @@ int main( int argc, char **argv )
 	signal( SIGTERM, Sys_SigHandler );
 	signal( SIGINT, Sys_SigHandler );
 
+#ifdef EMSCRIPTEN
+    emscripten_set_main_loop(Sys_GameLoop, 0, 0);
+#else
 	while( 1 )
 	{
 		Com_Frame( );
 	}
-
+#endif
 	return 0;
 }
-
