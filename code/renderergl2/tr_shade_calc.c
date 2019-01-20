@@ -808,7 +808,7 @@ void RB_CalcRotateTexMatrix( float degsPerSecond, float *matrix )
 	float sinValue, cosValue;
 
 	degs = -degsPerSecond * timeScale;
-	index = (int64_t)(degs * ( FUNCTABLE_SIZE / 360.0f ));
+	index = (int)(degs * ( FUNCTABLE_SIZE / 360.0f ));
 
 	sinValue = tr.sinTable[ index & FUNCTABLE_MASK ];
 	cosValue = tr.sinTable[ ( index + FUNCTABLE_SIZE / 4 ) & FUNCTABLE_MASK ];

@@ -1952,7 +1952,7 @@ static void RawImage_UploadTexture(GLuint texture, byte *data, int x, int y, int
 	int size, miplevel;
 	qboolean lastMip = qfalse;
 
-	dataFormat = internalFormat; //PixelDataFormatFromInternalFormat(internalFormat);
+	dataFormat =  PixelDataFormatFromInternalFormat(internalFormat);
 	dataType = picFormat == GL_RGBA16 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_BYTE;
 
 	miplevel = 0;
@@ -2162,7 +2162,7 @@ image_t *R_CreateImage2( const char *name, byte *pic, int width, int height, GLe
 	image->uploadHeight = height;
 
 	// Allocate texture storage so we don't have to worry about it later.
-	dataFormat = internalFormat; // PixelDataFormatFromInternalFormat(internalFormat);
+	dataFormat = PixelDataFormatFromInternalFormat(internalFormat);
 	mipWidth = width;
 	mipHeight = height;
 	miplevel = 0;
