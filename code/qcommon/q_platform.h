@@ -97,7 +97,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define ID_INLINE __inline
 #define PATH_SEP '\\'
 
-#if defined( __WIN64__ ) 
+#if defined( __WIN64__ )
 #define ARCH_STRING "x86_64"
 #elif defined _M_ALPHA
 #define ARCH_STRING "AXP"
@@ -299,6 +299,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 
 //===========================================================================
+
+//============================================================== BROWSER ====
+
+ #ifdef EMSCRIPTEN
+
+ #define OS_STRING "emscripten"
+#define ID_INLINE
+#define PATH_SEP '/'
+#define ARCH_STRING "bytecode"
+#define DLL_EXT ".qvm"
+#define Q3_LITTLE_ENDIAN
+
+ #endif
+
+
 
 //catch missing defines in above blocks
 #if !defined( OS_STRING )
