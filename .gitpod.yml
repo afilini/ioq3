@@ -1,0 +1,4 @@
+image:
+  file: docker/gitpod.Dockerfile
+  # Context is optional, defaults to an empty context
+  context: docker
