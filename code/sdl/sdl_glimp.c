@@ -1002,6 +1002,9 @@ void GLimp_Init( qboolean fixedFunction )
 		ri.Cvar_Set( "com_abnormalExit", "0" );
 	}
 
+	ri.Cvar_Set( "r_mode", "2" );
+	ri.Cvar_Set( "r_fullscreen", "0" );
+
 	ri.Sys_GLimpInit( );
 
 	// Create the window and set up the context
