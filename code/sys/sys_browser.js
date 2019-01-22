@@ -350,9 +350,9 @@ var LibrarySys = {
 		}
 	},
 	Sys_GetCurrentUser: function () {
-		var stack = Runtime.stackSave();
+		var stack = stackSave();
 		var ret = allocate(intArrayFromString('player'), 'i8', ALLOC_STACK);
-		Runtime.stackRestore(stack);
+		stackRestore(stack);
 		return ret;
 	},
 	Sys_Dialog: function (type, message, title) {

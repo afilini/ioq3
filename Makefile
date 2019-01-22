@@ -280,15 +280,15 @@ ifneq ($(BUILD_CLIENT),0)
   endif
 endif
 
-# Add git version info
-USE_GIT=
-ifeq ($(wildcard .git),.git)
-  GIT_REV=$(shell git show -s --pretty=format:%h-%ad --date=short)
-  ifneq ($(GIT_REV),)
-    VERSION:=$(VERSION)_GIT_$(GIT_REV)
-    USE_GIT=1
-  endif
-endif
+# # Add git version info
+# USE_GIT=
+# ifeq ($(wildcard .git),.git)
+#   GIT_REV=$(shell git show -s --pretty=format:%h-%ad --date=short)
+#   ifneq ($(GIT_REV),)
+#     VERSION:=$(VERSION)_GIT_$(GIT_REV)
+#     USE_GIT=1
+#   endif
+# endif
 
 
 #############################################################################
@@ -893,7 +893,7 @@ ifeq ($(PLATFORM),js)
 
   BUILD_STANDALONE=1
 
-  HAVE_VM_COMPILED=true
+  HAVE_VM_COMPILED=false
 
   USE_CURL=0
   USE_CODEC_VORBIS=0
@@ -909,36 +909,35 @@ ifeq ($(PLATFORM),js)
   LIBSYSNODE=$(SYSDIR)/sys_node.js
   LIBVMJS=$(CMDIR)/vm_js.js
 
-  CLIENT_LDFLAGS += --js-library $(LIBSYSCOMMON) \
+  CLIENT_LDFLAGS += -s WASM=1 --js-library $(LIBSYSCOMMON) \
     --js-library $(LIBSYSBROWSER) \
     --js-library $(LIBVMJS) \
     -s INVOKE_RUN=0 \
-    -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_free', '_atof', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_VM_GetCurrent', '_VM_SetCurrent', '_VM_Syscall']" \
+    -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_fopen', '_free', '_atof', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_VM_GetCurrent', '_VM_SetCurrent', '_VM_Syscall']" \
     -s OUTLINING_LIMIT=20000 \
     -s LEGACY_GL_EMULATION=1 \
     -s RESERVED_FUNCTION_POINTERS=1 \
-    -s TOTAL_MEMORY=234881024 \
+    -s TOTAL_MEMORY=250MB \
     -s EXPORT_NAME=\"ioq3\" \
     $(OPTIMIZE)
 
-  SERVER_LDFLAGS += --js-library $(LIBSYSCOMMON) \
+  SERVER_LDFLAGS += -s WASM=1 --js-library $(LIBSYSCOMMON) \
     --js-library $(LIBSYSNODE) \
     --js-library $(LIBVMJS) \
     -s INVOKE_RUN=1 \
-    -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_free', '_atof', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_CON_SetIsTTY', '_VM_GetCurrent', '_VM_SetCurrent', '_VM_Syscall']" \
+    -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_fopen', '_free', '_atof', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_CON_SetIsTTY', '_VM_GetCurrent', '_VM_SetCurrent', '_VM_Syscall']" \
     -s OUTLINING_LIMIT=20000 \
     -s LEGACY_GL_EMULATION=1 \
     -s RESERVED_FUNCTION_POINTERS=1 \
-    -s TOTAL_MEMORY=234881024 \
+    -s TOTAL_MEMORY=250MB \
     -s EXPORT_NAME=\"ioq3ded\" \
     $(OPTIMIZE)
 
-  SHLIBEXT=js
+  SHLIBEXT=wasm
   SHLIBNAME=.$(SHLIBEXT)
-  SHLIBLDFLAGS=$(LDFLAGS) \
+  SHLIBLDFLAGS=$(LDFLAGS) -s WASM=1\
     -s INVOKE_RUN=0 \
     -s EXPORTED_FUNCTIONS="['_vmMain', '_dllEntry']" \
-    -s DLOPEN_SUPPORT=1 \
     -s SIDE_MODULE=1 \
     $(OPTIMIZE)
 

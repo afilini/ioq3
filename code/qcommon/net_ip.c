@@ -830,13 +830,13 @@ SOCKET NET_IPSocket( char *net_interface, int port, int *err ) {
 		Com_Printf( "WARNING: NET_IPSocket: socket: %s\n", NET_ErrorString() );
 		return newsocket;
 	}
-	// make it non-blocking
-	if( ioctlsocket( newsocket, FIONBIO, &_true ) == SOCKET_ERROR ) {
-		Com_Printf( "WARNING: NET_IPSocket: ioctl FIONBIO: %s\n", NET_ErrorString() );
-		*err = socketError;
-		closesocket(newsocket);
-		return INVALID_SOCKET;
-	}
+	// // make it non-blocking
+	// if( ioctlsocket( newsocket, FIONBIO, &_true ) == SOCKET_ERROR ) {
+	// 	Com_Printf( "WARNING: NET_IPSocket: ioctl FIONBIO: %s\n", NET_ErrorString() );
+	// 	*err = socketError;
+	// 	closesocket(newsocket);
+	// 	return INVALID_SOCKET;
+	// }
 
 	// make it broadcast capable
 	if( setsockopt( newsocket, SOL_SOCKET, SO_BROADCAST, (char *) &i, sizeof(i) ) == SOCKET_ERROR ) {
@@ -902,13 +902,13 @@ SOCKET NET_IP6Socket( char *net_interface, int port, struct sockaddr_in6 *bindto
 		return newsocket;
 	}
 
-	// make it non-blocking
-	if( ioctlsocket( newsocket, FIONBIO, &_true ) == SOCKET_ERROR ) {
-		Com_Printf( "WARNING: NET_IP6Socket: ioctl FIONBIO: %s\n", NET_ErrorString() );
-		*err = socketError;
-		closesocket(newsocket);
-		return INVALID_SOCKET;
-	}
+	// // make it non-blocking
+	// if( ioctlsocket( newsocket, FIONBIO, &_true ) == SOCKET_ERROR ) {
+	// 	Com_Printf( "WARNING: NET_IP6Socket: ioctl FIONBIO: %s\n", NET_ErrorString() );
+	// 	*err = socketError;
+	// 	closesocket(newsocket);
+	// 	return INVALID_SOCKET;
+	// }
 
 #ifdef IPV6_V6ONLY
 	{

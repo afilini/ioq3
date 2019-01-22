@@ -1071,7 +1071,7 @@ void IN_Init( void )
 
 	IN_InitKeyLockStates( );
 
-	IN_InitJoystick( );
+	// IN_InitJoystick( );
 	Com_DPrintf( "------------------------------------\n" );
 }
 

@@ -1,3 +1,5 @@
+Runtime.generateStructInfo = function(x) { return x;};
+
 var LibrarySysCommon = {
 	$CRC32: {
 		TABLE: [
@@ -149,7 +151,7 @@ var LibrarySysCommon = {
 			}
 		},
 		CRC32File: function (path) {
-			var stack = Runtime.stackSave();
+			var stack = stackSave();
 			var chunkSize = 1024*1024;
 			var bufp = allocate(chunkSize, 'i8', ALLOC_STACK);
 			var crc = CRC32.Start();
@@ -168,13 +170,13 @@ var LibrarySysCommon = {
 				} while (n);
 				FS.close(stream);
 			} catch (e) {
-				Runtime.stackRestore(stack);
+				stackRestore(stack);
 				return null;
 			}
 
 			SYSC.Print('generated crc32 for ' + path + ' in ' + ((Date.now() - start) / 1000).toFixed(2) + ' seconds');
 
-			Runtime.stackRestore(stack);
+			stackRestore(stack);
 			return CRC32.Finish(crc);
 		},
 		GetCDN: function () {

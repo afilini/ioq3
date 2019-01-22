@@ -976,7 +976,7 @@ var LibraryVM = {
 		VM.vms[handle] = vm;
 
 		if (!VM.DestroyPtr) {
-			VM.DestroyPtr = Runtime.addFunction(_VM_Destroy);
+			VM.DestroyPtr = addFunction(_VM_Destroy);
 		}
 
 		{{{ makeSetValue('vmp', 'VM.vm_t.entryOfs', 'handle', 'i32') }}};
