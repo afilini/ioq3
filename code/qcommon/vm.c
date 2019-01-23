@@ -1049,6 +1049,6 @@ void VM_SetCurrent(vm_t *vm) {
 	currentVM = vm;
 }
 
-void VM_Syscall() {
-}
+// void VM_Syscall() {
+// }
 #endif
