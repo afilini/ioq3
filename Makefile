@@ -280,15 +280,15 @@ ifneq ($(BUILD_CLIENT),0)
   endif
 endif
 
-# # Add git version info
-# USE_GIT=
-# ifeq ($(wildcard .git),.git)
-#   GIT_REV=$(shell git show -s --pretty=format:%h-%ad --date=short)
-#   ifneq ($(GIT_REV),)
-#     VERSION:=$(VERSION)_GIT_$(GIT_REV)
-#     USE_GIT=1
-#   endif
-# endif
+# Add git version info
+USE_GIT=
+ifeq ($(wildcard .git),.git)
+  GIT_REV=$(shell git show -s --pretty=format:%h-%ad --date=short)
+  ifneq ($(GIT_REV),)
+    VERSION:=$(VERSION)_GIT_$(GIT_REV)
+    USE_GIT=0  # disable checking git for now
+  endif
+endif
 
 
 #############################################################################
@@ -888,11 +888,12 @@ ifeq ($(PLATFORM),js)
 
 # debug optimize flags: --closure 0 --minify 0 -g
 
-  OPTIMIZEVM += -g #-O2
+  OPTIMIZEVM += -O1 #--closure 0 --minify 0 -g
   OPTIMIZE = $(OPTIMIZEVM)
-
   BUILD_STANDALONE=1
 
+  BOTCFLAGS += -O3
+  
   HAVE_VM_COMPILED=true
 
   USE_CURL=0
@@ -906,30 +907,36 @@ ifeq ($(PLATFORM),js)
 
   LIBSYSCOMMON=$(SYSDIR)/sys_common.js
   LIBSYSBROWSER=$(SYSDIR)/sys_browser.js
+  LIBOPENAL=./openal.js
   LIBSYSNODE=$(SYSDIR)/sys_node.js
   LIBVMJS=$(CMDIR)/vm_js.js
 
-  CLIENT_LDFLAGS += -s WASM=0 --js-library $(LIBSYSCOMMON) \
+  CLIENT_LDFLAGS += -s "BINARYEN_TRAP_MODE='allow'" \
+    -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+    -s WASM=0 --js-library $(LIBSYSCOMMON) \
     --js-library $(LIBSYSBROWSER) \
+    --js-library $(LIBOPENAL) \
     --js-library $(LIBVMJS) \
     -s INVOKE_RUN=0 \
+    -s EXPORTED_RUNTIME_METHODS=['dynCall'] \
     -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_fopen', '_free', '_atof', '_strncpy', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_VM_GetCurrent', '_VM_SetCurrent']" \
     -s OUTLINING_LIMIT=20000 \
+    -s TOTAL_MEMORY=234881024 \
     -s LEGACY_GL_EMULATION=1 \
-    -s RESERVED_FUNCTION_POINTERS=1 \
-    -s TOTAL_MEMORY=320MB \
+    -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXPORT_NAME=\"ioq3\" \
     $(OPTIMIZE)
 
-  SERVER_LDFLAGS += -s WASM=0 --js-library $(LIBSYSCOMMON) \
+  SERVER_LDFLAGS += -s WASM=1 --js-library $(LIBSYSCOMMON) \
     --js-library $(LIBSYSNODE) \
     --js-library $(LIBVMJS) \
     -s INVOKE_RUN=1 \
+    -s EXPORTED_RUNTIME_METHODS=['dynCall'] \
     -s EXPORTED_FUNCTIONS="['_main', '_malloc', '_fopen', '_free', '_atof', '_strncpy', '_Com_Printf', '_Com_Error', '_Com_ProxyCallback', '_Com_GetCDN', '_Com_GetManifest', '_Z_Malloc', '_Z_Free', '_S_Malloc', '_Cvar_Set', '_Cvar_VariableString', '_CON_SetIsTTY', '_VM_GetCurrent', '_VM_SetCurrent']" \
     -s OUTLINING_LIMIT=20000 \
+    -s TOTAL_MEMORY=234881024 \
     -s LEGACY_GL_EMULATION=1 \
     -s RESERVED_FUNCTION_POINTERS=1 \
-    -s TOTAL_MEMORY=320MB \
     -s EXPORT_NAME=\"ioq3ded\" \
     $(OPTIMIZE)
 
@@ -2668,9 +2675,9 @@ $(B)/ded/%.o: $(NDIR)/%.c
 
 # Extra dependencies to ensure the git version is incorporated
 ifeq ($(USE_GIT),1)
-  $(B)/client/cl_console.o : .git/index
-  $(B)/client/common.o : .git/index
-  $(B)/ded/common.o : .git/index
+$(B)/client/cl_console.o : .git/index
+$(B)/client/common.o : .git/index
+$(B)/ded/common.o : .git/index
 endif
 
 

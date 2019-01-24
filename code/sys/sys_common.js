@@ -68,9 +68,8 @@ var LibrarySysCommon = {
 			total: 4
 		},
 		download_complete_data_t: {
-			__size__: 8,
-			loaded: 0,
-			total: 4
+			__size__: 4,
+			progress: 0,
 		},
 		eula: 'LIMITED USE SOFTWARE LICENSE AGREEMENT\n\n \n\n' +
 			'This Limited Use Software License Agreement (the "Agreement") is a legal agreement between you, the end-user, and Id Software, Inc. ("ID").  BY CONTINUING THE INSTALLATION OF THIS GAME DEMO PROGRAM ENTITLED QUAKE III: ARENA (THE "SOFTWARE"), BY LOADING OR RUNNING THE SOFTWARE, OR BY PLACING OR COPYING THE SOFTWARE ONTO YOUR COMPUTER HARD DRIVE, COMPUTER RAM OR OTHER STORAGE, YOU ARE AGREEING TO BE BOUND BY THE TERMS OF THIS AGREEMENT.\n\n\n\n' +

@@ -643,8 +643,7 @@ var LibraryVM = {
 			EmitStatement('\t{{{ makeSetValue("savedVM", "VM.vm_t.programStack", "STACKTOP", "i32") }}};');
 			EmitStatement('\t// call into the client');
 			EmitStatement('\tvar systemCall = {{{ makeGetValue("savedVM", "VM.vm_t.systemCall", "i32*") }}};');
-			EmitStatement('\tvar ret = Runtime.dynCall("ii", systemCall, [image + stackOnEntry + 4]);');
-			EmitStatement('\t// restore return address');
+			EmitStatement('\tvar ret = dynCall("ii", systemCall, [image + stackOnEntry + 4]);');			EmitStatement('\t// restore return address');
 			EmitStatement('\t{{{ makeSetValue("image", "stackOnEntry + 4", "returnAddr", "i32") }}};');
 			EmitStatement('\t// leave the return value on the stack');
 			EmitStatement('\t{{{ makeSetValue("image", "stackOnEntry - 4", "ret", "i32") }}};');

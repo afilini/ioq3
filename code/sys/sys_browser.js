@@ -346,7 +346,7 @@ var LibrarySys = {
 		} else if (window.performance.webkitNow) {
 			return parseInt(window.performance.webkitNow(), 10);
 		} else {
-			return Date.now() - SYS.timeBase();
+			return Date.now() - SYS.timeBase;
 		}
 	},
 	Sys_GetCurrentUser: function () {

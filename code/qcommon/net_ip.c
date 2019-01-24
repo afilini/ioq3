@@ -838,10 +838,10 @@ SOCKET NET_IPSocket( char *net_interface, int port, int *err ) {
 	// 	return INVALID_SOCKET;
 	// }
 
-	// make it broadcast capable
-	if( setsockopt( newsocket, SOL_SOCKET, SO_BROADCAST, (char *) &i, sizeof(i) ) == SOCKET_ERROR ) {
-		Com_Printf( "WARNING: NET_IPSocket: setsockopt SO_BROADCAST: %s\n", NET_ErrorString() );
-	}
+	// // make it broadcast capable
+	// if( setsockopt( newsocket, SOL_SOCKET, SO_BROADCAST, (char *) &i, sizeof(i) ) == SOCKET_ERROR ) {
+	// 	Com_Printf( "WARNING: NET_IPSocket: setsockopt SO_BROADCAST: %s\n", NET_ErrorString() );
+	// }
 
 	if( !net_interface || !net_interface[0]) {
 		address.sin_family = AF_INET;
@@ -1425,7 +1425,7 @@ static qboolean NET_GetCvars( void ) {
 #else
 	/* End users have it enabled so they can connect to ipv6-only hosts, but ipv4 will be
 	 * used if available due to ping */
-	net_enabled = Cvar_Get( "net_enabled", "3", CVAR_LATCH | CVAR_ARCHIVE );
+	net_enabled = Cvar_Get( "net_enabled", "9", CVAR_LATCH | CVAR_ARCHIVE );
 #endif
 	modified = net_enabled->modified;
 	net_enabled->modified = qfalse;
