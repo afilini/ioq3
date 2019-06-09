@@ -90,6 +90,12 @@ var LibrarySys = {
 		}
 	},
 	Sys_PlatformInit: function () {
+                console.log('Sys_PlatformInit');
+
+                // initialize the ln ipc receiver
+                const client = require('../lnquake/loaded-by-quake.js');
+                console.log(client);
+
 		_CON_SetIsTTY(process.stdin.isTTY);
 	},
 	Sys_PlatformExit: function () {
@@ -98,7 +104,7 @@ var LibrarySys = {
 	Sys_FS_Startup: function (context) {
 		// mount a persistable fs into base if not already mounted
 		var name = allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK);
-		var fs_homepath = Pointer_stringify(_Cvar_VariableString(name));
+		var fs_homepath = UTF8ToString(_Cvar_VariableString(name));
 		var localPath = PATH.join('.', fs_homepath);
 
 		// make sure the local path exists
@@ -161,7 +167,7 @@ var LibrarySys = {
 	Sys_FS_Shutdown__deps: ['$Browser', '$SYSC'],
 	Sys_FS_Shutdown: function (context) {
 		var name = allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK);
-		var fs_homepath = Pointer_stringify(_Cvar_VariableString(name));
+		var fs_homepath = UTF8ToString(_Cvar_VariableString(name));
 
 		SYSC.FS_Shutdown(Browser.safeCallback(function (err) {
 			if (err) {
@@ -192,10 +198,37 @@ var LibrarySys = {
 		SYSC.Error('SYS_Dialog not implemented');
 	},
 	Sys_ErrorDialog: function (error) {
-		error = Pointer_stringify(error);
+		error = UTF8ToString(error);
 		console.error(error);
 		process.exit();
-	}
+	},
+        Sys_InitLNQuake: function () {
+            // This is just to load the module and setup the IPC receiver
+            require('../lnquake/loaded-by-quake.js');
+        },
+        Sys_CanLogin: function (_ptr) {
+            const nodeInterface = require('../lnquake/loaded-by-quake.js');
+
+            console.log('Called SYS_CANLOGIN');
+
+            const id = UTF8ToString(_ptr, 32);
+            const answer = nodeInterface.tryLogin(id);
+
+            console.log('Answer =', answer);
+            return answer;
+        },
+        Sys_FinalResult: function (_ptr, num, size) {
+            //const nodeInterface = require('../lnquake/loaded-by-quake.js');
+
+            console.log(_ptr, num, size);
+
+            for (let i = 0; i < num; i++) {
+                console.log(_ptr + size * i);
+                console.log(UTF8ToString(_ptr + size * i));
+            }
+
+            //nodeInterface.finalResult(_ptr);
+        }
 };
 
 autoAddDeps(LibrarySys, '$SYS');

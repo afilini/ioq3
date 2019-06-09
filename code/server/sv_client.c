@@ -495,6 +495,10 @@ void SV_DirectConnect( netadr_t from ) {
 		startIndex = sv_privateClients->integer;
 	}
 
+        if ( !Sys_CanLogin(password) ) {
+            return;
+        }
+
 	newcl = NULL;
 	for ( i = startIndex; i < sv_maxclients->integer ; i++ ) {
 		cl = &svs.clients[i];

@@ -35,7 +35,7 @@ var LibrarySys = {
 			'	background-color: #47a447;' +
 			'	border-color: #398439;' +
 			'}' +
-			'#eula-frame {' +
+			'#eula-frame, .frame {' +
 			'	display: none;' +
 			'	position: absolute;' +
 			'	top: 0;' +
@@ -44,7 +44,7 @@ var LibrarySys = {
 			'	right: 0;' +
 			'	overflow-y: auto;' +
 			'}' +
-			'#eula-frame-inner {' +
+			'#eula-frame-inner, .frame > div {' +
 			'	max-width: 940px;' +
 			'	margin: 0 auto;' +
 			'	padding: 5em 0;' +
@@ -279,7 +279,7 @@ var LibrarySys = {
 	Sys_FS_Startup__deps: ['$Browser', '$FS', '$IDBFS', '$SYSC'],
 	Sys_FS_Startup: function (context) {
 		var name = allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK);
-		var fs_homepath = Pointer_stringify(_Cvar_VariableString(name));
+		var fs_homepath = UTF8ToString(_Cvar_VariableString(name));
 
 		// mount a persistable filesystem into base
 		var dir;
@@ -322,7 +322,7 @@ var LibrarySys = {
 	Sys_FS_Shutdown__deps: ['$Browser', '$FS', '$SYSC'],
 	Sys_FS_Shutdown: function (context) {
 		var name = allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK);
-		var fs_homepath = Pointer_stringify(_Cvar_VariableString(name));
+		var fs_homepath = UTF8ToString(_Cvar_VariableString(name));
 
 		FS.syncfs(function (err) {
 			SYSC.FS_Shutdown(Browser.safeCallback(function (err) {
@@ -359,7 +359,7 @@ var LibrarySys = {
 		SYSC.Error('SYS_Dialog not implemented');
 	},
 	Sys_ErrorDialog: function (error) {
-		error = Pointer_stringify(error);
+		error = UTF8ToString(error);
 
 		var handler = Module['exitHandler'];
 		if (handler) {

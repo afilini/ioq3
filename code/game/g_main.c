@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "g_local.h"
 
+extern void		Sys_FinalResult (void *ptr, size_t num, size_t size);
+
 level_locals_t	level;
 
 typedef struct {
@@ -1142,6 +1144,7 @@ Append information about this game to the log file
 void LogExit( const char *string ) {
 	int				i, numSorted;
 	gclient_t		*cl;
+        char                    *result[32];
 #ifdef MISSIONPACK
 	qboolean won = qtrue;
 #endif
@@ -1178,6 +1181,9 @@ void LogExit( const char *string ) {
 
 		ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 
+                // result to send back to JS
+                result[i] = cl->pers.netname;
+
 		G_LogPrintf( "score: %i  ping: %i  client: %i %s\n", cl->ps.persistant[PERS_SCORE], ping, level.sortedClients[i],	cl->pers.netname );
 #ifdef MISSIONPACK
 		if (g_singlePlayer.integer && g_gametype.integer == GT_TOURNAMENT) {
@@ -1188,6 +1194,8 @@ void LogExit( const char *string ) {
 #endif
 
 	}
+
+        Sys_FinalResult(result, numSorted, sizeof(char*));
 
 #ifdef MISSIONPACK
 	if (g_singlePlayer.integer) {

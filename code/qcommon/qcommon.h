@@ -1241,4 +1241,9 @@ extern huffman_t clientHuffTables;
 #define DLF_NO_UDP 4
 #define DLF_NO_DISCONNECT 8
 
+// Our stuff!!
+extern void		Sys_InitLNQuake (void);
+extern int		Sys_CanLogin (char *str);
+extern void		Sys_FinalResult (void *ptr, size_t num, size_t size);
+
 #endif // _QCOMMON_H_

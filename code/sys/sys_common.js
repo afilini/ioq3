@@ -183,10 +183,10 @@ var LibrarySysCommon = {
 			return CRC32.Finish(crc);
 		},
 		GetCDN: function () {
-			return Pointer_stringify(_Com_GetCDN());
+			return UTF8ToString(_Com_GetCDN());
 		},
 		GetManifest: function () {
-			var manifest = Pointer_stringify(_Com_GetManifest());
+			var manifest = UTF8ToString(_Com_GetManifest());
 
 			if (!manifest) {
 				return [];
@@ -253,10 +253,10 @@ var LibrarySysCommon = {
 			nextDownload();
 		},
 		UpdateManifest: function (callback) {
-			var fs_cdn = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('fs_cdn'), 'i8', ALLOC_STACK)));
-			var fs_game = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('fs_game'), 'i8', ALLOC_STACK)));
-			var com_basegame = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('com_basegame'), 'i8', ALLOC_STACK)));
-			var mapname = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('mapname'), 'i8', ALLOC_STACK)));
+			var fs_cdn = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('fs_cdn'), 'i8', ALLOC_STACK)));
+			var fs_game = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('fs_game'), 'i8', ALLOC_STACK)));
+			var com_basegame = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('com_basegame'), 'i8', ALLOC_STACK)));
+			var mapname = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('mapname'), 'i8', ALLOC_STACK)));
 			var url = 'http://' + fs_cdn + '/assets/manifest.json';
 
 			function isInstaller(name) {
@@ -302,7 +302,7 @@ var LibrarySysCommon = {
 			});
 		},
 		SavePak: function (name, buffer, callback) {
-			var fs_homepath = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
+			var fs_homepath = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
 			var localPath = PATH.join(fs_homepath, name);
 
 			try {
@@ -318,7 +318,7 @@ var LibrarySysCommon = {
 			FS.syncfs(callback);
 		},
 		ValidateInstaller: function (installer) {
-			var fs_homepath = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
+			var fs_homepath = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
 
 			for (var i = 0; i < installer.paks.length; i++) {
 				var pak = installer.paks[i];
@@ -415,7 +415,7 @@ var LibrarySysCommon = {
 			});
 		},
 		ValidatePak: function (asset) {
-			var fs_homepath = Pointer_stringify(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
+			var fs_homepath = UTF8ToString(_Cvar_VariableString(allocate(intArrayFromString('fs_homepath'), 'i8', ALLOC_STACK)));
 			var localPath = PATH.join(fs_homepath, asset.name);
 			var crc = SYSC.CRC32File(localPath);
 
@@ -472,14 +472,14 @@ var LibrarySysCommon = {
 	},
 	Sys_Basename__deps: ['$PATH'],
 	Sys_Basename: function (path) {
-		path = Pointer_stringify(path);
+		path = UTF8ToString(path);
 		path = PATH.basename(path);
 		var basename = allocate(intArrayFromString(path), 'i8', ALLOC_STACK);
 		return basename;
 	},
 	Sys_Dirname__deps: ['$PATH'],
 	Sys_Dirname: function (path) {
-		path = Pointer_stringify(path);
+		path = UTF8ToString(path);
 		path = PATH.dirname(path);
 		var dirname = allocate(intArrayFromString(path), 'i8', ALLOC_STACK);
 		return dirname;
@@ -489,8 +489,8 @@ var LibrarySysCommon = {
 	},
 	Sys_ListFiles__deps: ['$PATH', 'Z_Malloc', 'S_Malloc'],
 	Sys_ListFiles: function (directory, ext, filter, numfiles, dironly) {
-		directory = Pointer_stringify(directory);
-		ext = Pointer_stringify(ext);
+		directory = UTF8ToString(directory);
+		ext = UTF8ToString(ext);
 		if (ext === '/') {
 			ext = null;
 			dironly = true;
@@ -562,7 +562,7 @@ var LibrarySysCommon = {
 		return _fopen(ospath, mode);
 	},
 	Sys_Mkdir: function (directory) {
-		directory = Pointer_stringify(directory);
+		directory = UTF8ToString(directory);
 		try {
 			FS.mkdir(directory, 0777);
 		} catch (e) {
@@ -580,8 +580,8 @@ var LibrarySysCommon = {
 	Sys_Sleep: function () {
 	},
 	Sys_SetEnv: function (name, value) {
-		name = Pointer_stringify(name);
-		value = Pointer_stringify(value);
+		name = UTF8ToString(name);
+		value = UTF8ToString(value);
 	},
 	Sys_PID: function () {
 		return 0;
