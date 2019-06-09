@@ -205,7 +205,7 @@ var LibrarySysCommon = {
 		DownloadAsset: function (asset, onprogress, onload) {
 			var root = SYSC.GetCDN();
 			var name = asset.name.replace(/(.+\/|)(.+?)$/, '$1' + asset.checksum + '-$2');
-			var url = 'http://' + root + '/assets/' + name;
+			var url = 'https://' + root + '/assets/' + name;
 
 			SYS.DoXHR(url, {
 				dataType: 'arraybuffer',
